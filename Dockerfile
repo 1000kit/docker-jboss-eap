@@ -6,45 +6,32 @@ LABEL Vendor="1000kit"
 LABEL License=GPLv3
 LABEL Version=1.0.0
 
-ENV EAP_BASE  6.4.0
-ENV EAP_PATCH 6.4.8
+ENV EAP_BASE  7.0.0
 ENV JBOSS_HOME /opt/jboss
 ENV JBOSS_BASE /opt
 
 USER root
 
-#jboss-eap-6.4.0.zip  jboss-eap-6.4.3-patch.zip
 ADD ./install/jboss-eap-${EAP_BASE}.zip /tmp/     
-ADD ./install/jboss-eap-${EAP_PATCH}-patch.zip /tmp/     
-ADD ./install/applyPatch.sh /tmp/
 
 # Create a user and group used to launch processes
-# The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
-# so there is a high chance that this ID will be equal to the current user
-# making it easier to use volumes (no permission issues)
-
 RUN groupadd -r jboss -g 2000 \
  && useradd -u 2000 -r -g jboss -m -d /home/jboss -s /sbin/nologin -c "jboss user" jboss \
  && chmod -R 755 /home/jboss \
- && mkdir ${JBOSS_BASE} ;  chmod 755 ${JBOSS_BASE}\
- ; chown -R jboss:jboss ${JBOSS_BASE} \
+ && mkdir ${JBOSS_BASE} ;  chmod 755 ${JBOSS_BASE} ; chown -R jboss:jboss ${JBOSS_BASE} \
  && echo 'jboss ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \
- && chown jboss:jboss /tmp/jboss* /tmp/apply*
+ && chown jboss:jboss /tmp/jboss*
 
 # install User
 USER jboss
 
 RUN /usr/bin/unzip -q /tmp/jboss-eap-${EAP_BASE}.zip -d ${JBOSS_BASE}/ \
-    && ln -s ${JBOSS_BASE}/jboss-eap-6* ${JBOSS_HOME} \
+    && ln -s ${JBOSS_BASE}/jboss-eap-7* ${JBOSS_HOME} \
     && ${JBOSS_HOME}/bin/add-user.sh admin admin2016\! --silent \
-    && chmod 755 /tmp/applyPatch.sh \  
-    && /tmp/applyPatch.sh jboss-eap-${EAP_PATCH}-patch.zip \
-    && /bin/rm /tmp/jboss-eap*.zip /tmp/apply*.sh 
-
-#### Patch the server    
-
-# Expose Ports 8787:debug
-EXPOSE 9990 9999 8443 8787 8080
+    && /bin/rm /tmp/jboss-eap*.zip
+ 
+# Expose Ports 
+EXPOSE 8080 9990
 
 # define the deployments directory as a volume that can be mounted
 VOLUME ["/opt/jboss/server/jboss/standalone/configuration","/opt/jboss/server/jboss/standalone/log"]
@@ -59,5 +46,4 @@ ENV LAUNCH_JBOSS_IN_BACKGROUND true
 CMD ["/opt/jboss/server/jboss/bin/standalone.sh", "-c", "standalone.xml", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0" , "--debug"]
 
 ####END
-# interessant
-# https://github.com/dell-cloud-marketplace/docker-wildfly/blob/master/run.sh
+
