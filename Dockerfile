@@ -47,8 +47,8 @@ RUN /usr/bin/unzip -q /tmp/jboss-eap-${EAP_BASE}.zip -d ${JBOSS_BASE}/ \
 EXPOSE 9990 9999 8443 8787 8080
 
 # define the deployments directory as a volume that can be mounted
-VOLUME ["/opt/jboss/server/jboss/standalone/configuration","/opt/jboss/server/jboss/standalone/log"]
-VOLUME ["/opt/jboss/server/jboss/standalone/deployments"]
+VOLUME ["/opt/jboss/standalone/configuration","/opt/jboss/standalone/log"]
+VOLUME ["/opt/jboss/standalone/deployments"]
 
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
@@ -56,7 +56,7 @@ ENV LAUNCH_JBOSS_IN_BACKGROUND true
 
 
 #CMD /opt/jboss/server/jboss/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
-CMD ["/opt/jboss/server/jboss/bin/standalone.sh", "-c", "standalone.xml", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0" , "--debug"]
+CMD ["/opt/jboss/bin/standalone.sh", "-c", "standalone.xml", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0" , "--debug"]
 
 ####END
 # interessant
