@@ -3,7 +3,7 @@
 #
 #
 BVERSION=6.4.0
-VERSION=6.4.8
+VERSION=6.4.9
 IMAGE="1000kit/jboss-eap"
 
 cd "$( dirname "${BASH_SOURCE[0]}" )"
