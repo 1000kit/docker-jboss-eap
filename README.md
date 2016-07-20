@@ -14,7 +14,7 @@ The `Dockerfile` is available in the `7.0.0` branch and is built in the Docker H
 
 ## Build Image
 
-Please download the EAP 7.0.0 zip package from redhat and the EAP 6.4.8 Patch file. Put both in the install directory.
+Please download the EAP 7.0.0 zip package from redhat and the EAP 6.4.9 Patch file. Put both in the install directory.
 
 Take a Dockerfile and build with the default arguments:
 
