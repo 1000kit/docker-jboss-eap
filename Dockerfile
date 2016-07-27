@@ -11,11 +11,14 @@ ENV EAP_PATCH 6.4.9
 ENV JBOSS_HOME /opt/jboss
 ENV JBOSS_BASE /opt
 
+ARG EAP_DOWNLOAD_URL
+ARG EAPPATCH_DOWNLOAD_URL
+
 USER root
 
 #jboss-eap-6.4.0.zip  jboss-eap-6.4.3-patch.zip
-ADD ./install/jboss-eap-${EAP_BASE}.zip /tmp/     
-ADD ./install/jboss-eap-${EAP_PATCH}-patch.zip /tmp/     
+#ADD ./install/jboss-eap-${EAP_BASE}.zip /tmp/     
+#ADD ./install/jboss-eap-${EAP_PATCH}-patch.zip /tmp/     
 ADD ./install/applyPatch.sh /tmp/
 
 # Create a user and group used to launch processes
@@ -28,25 +31,26 @@ RUN groupadd -r jboss -g 2000 \
  && chmod -R 755 /home/jboss \
  && mkdir ${JBOSS_BASE} > /dev/null 2&>1 ;  chmod 755 ${JBOSS_BASE} ; chown -R jboss:jboss ${JBOSS_BASE} \
  && echo 'jboss ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \
- && chown jboss:jboss /tmp/jboss* /tmp/apply*
+ && chown jboss:jboss /tmp/apply*
 
 # install User
 
+RUN    echo "EAP: ${EAP_DOWNLOAD_URL}" \
+    && echo "PATCH ${EAPPATCH_DOWNLOAD_URL}" \   
+    && curl -L ${EAP_DOWNLOAD_URL} > /tmp/jboss-eap-${EAP_BASE}.zip \
+	&& curl -L ${EAPPATCH_DOWNLOAD_URL} > /tmp/jboss-eap-${EAP_PATCH}-patch.zip \
 
-RUN /usr/bin/unzip -q /tmp/jboss-eap-${EAP_BASE}.zip -d ${JBOSS_BASE}/ \
+	&& /usr/bin/unzip -q /tmp/jboss-eap-${EAP_BASE}.zip -d ${JBOSS_BASE}/ \
     && ln -s ${JBOSS_BASE}/jboss-eap-6* ${JBOSS_HOME} \
     && ${JBOSS_HOME}/bin/add-user.sh admin admin2016\! --silent \
     && chmod 755 /tmp/applyPatch.sh \  
     && /tmp/applyPatch.sh jboss-eap-${EAP_PATCH}-patch.zip \
     && mkdir ${JBOSS_HOME}/standalone/log \
-    && chown -R jboss:jboss ${JBOSS_HOME} \
+    
+    && chown -R jboss:jboss ${JBOSS_BASE}/jboss-eap-6* ${JBOSS_HOME} \
+	
+	&& bin/rm -rf ${JBOSS_HOME}/.installation \
     && /bin/rm /tmp/jboss-eap*.zip /tmp/apply*.sh 
-
-# define the deployments directory as a volume that can be mounted
-#VOLUME ["/opt/jboss/standalone/configuration",\
-#        "/opt/jboss/standalone/log", \
-#        "/opt/jboss/standalone/deployments"]
-
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
 ENV LAUNCH_JBOSS_IN_BACKGROUND true
