@@ -7,18 +7,19 @@ LABEL License=GPLv3
 LABEL Version=1.0.0
 
 ENV EAP_BASE  6.4.0
-ENV EAP_PATCH 6.4.9
+ENV EAP_PATCH1 6.4.9
+ENV EAP_PATCH2 6.4.10
+
+
 ENV JBOSS_HOME /opt/jboss
 ENV JBOSS_BASE /opt
 
 ARG EAP_DOWNLOAD_URL
 ARG EAPPATCH_DOWNLOAD_URL
 
-USER root
 
-#jboss-eap-6.4.0.zip  jboss-eap-6.4.3-patch.zip
-#ADD ./install/jboss-eap-${EAP_BASE}.zip /tmp/     
-#ADD ./install/jboss-eap-${EAP_PATCH}-patch.zip /tmp/     
+USER root
+  
 ADD ./install/applyPatch.sh /tmp/
 
 # Create a user and group used to launch processes
@@ -36,21 +37,25 @@ RUN groupadd -r jboss -g 2000 \
 # install User
 
 RUN    echo "EAP: ${EAP_DOWNLOAD_URL}" \
+    && df -h \
     && echo "PATCH ${EAPPATCH_DOWNLOAD_URL}" \   
     && curl -L ${EAP_DOWNLOAD_URL} > /tmp/jboss-eap-${EAP_BASE}.zip \
-	&& curl -L ${EAPPATCH_DOWNLOAD_URL} > /tmp/jboss-eap-${EAP_PATCH}-patch.zip \
+	&& curl -L ${EAPPATCH_DOWNLOAD_URL}/jboss-eap-${EAP_PATCH1}-patch.zip > /tmp/jboss-eap-${EAP_PATCH1}-patch.zip \
+	&& curl -L ${EAPPATCH_DOWNLOAD_URL}/jboss-eap-${EAP_PATCH2}-patch.zip > /tmp/jboss-eap-${EAP_PATCH2}-patch.zip \
 
 	&& /usr/bin/unzip -q /tmp/jboss-eap-${EAP_BASE}.zip -d ${JBOSS_BASE}/ \
     && ln -s ${JBOSS_BASE}/jboss-eap-6* ${JBOSS_HOME} \
     && ${JBOSS_HOME}/bin/add-user.sh admin admin2016\! --silent \
     && chmod 755 /tmp/applyPatch.sh \  
-    && /tmp/applyPatch.sh jboss-eap-${EAP_PATCH}-patch.zip \
+    && /tmp/applyPatch.sh jboss-eap-${EAP_PATCH1}-patch.zip\
+    && /tmp/applyPatch.sh jboss-eap-${EAP_PATCH2}-patch.zip\
     && mkdir ${JBOSS_HOME}/standalone/log \
     
     && chown -R jboss:jboss ${JBOSS_BASE}/jboss-eap-6* ${JBOSS_HOME} \
-	
-	&& bin/rm -rf ${JBOSS_HOME}/.installation \
-    && /bin/rm /tmp/jboss-eap*.zip /tmp/apply*.sh 
+
+	&& /bin/rm -rf ${JBOSS_HOME}/.installation /tmp/jboss-eap*.zip /tmp/apply*.sh\
+	&& du -hs ${JBOSS_HOME}*\
+	&& df -h
 
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
 ENV LAUNCH_JBOSS_IN_BACKGROUND true

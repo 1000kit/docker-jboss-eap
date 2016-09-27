@@ -20,9 +20,10 @@ echo "=> Waiting for the server to boot"
 wait_for_server
 
 echo "=> Executing the patch"
-
+echo "    $1"
 $JBOSS_CLI -c --command="patch apply /tmp/$1"
 
+echo "    PATCH DONE"
 
 #--connect << EOF
 #  patch apply /tmp/$1
