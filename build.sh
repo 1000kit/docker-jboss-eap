@@ -37,7 +37,6 @@ fi
 
 echo "build jboss EAP standalone image"
 echo "EAPURL: ${EAP_DOWNLOAD_URL}"
-echo "EAPPAT: ${EAPPATCH_DOWNLOAD_URL}"
 
 docker 	build --build-arg EAP_DOWNLOAD_URL="${EAP_DOWNLOAD_URL}" --force-rm -t ${IMAGE}:${VERSION} .
 		
