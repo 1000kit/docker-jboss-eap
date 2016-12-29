@@ -40,5 +40,8 @@ $ build.sh /opt/downloads
 $ export EAP_DOWNLOAD_URL=https://<host>/<link>
 $ build.sh
 ~~~~
-~~~~
 
+## run
+~~~~
+$ docker run -it 1000kit/jboss-eap:7.0.3
+~~~~
