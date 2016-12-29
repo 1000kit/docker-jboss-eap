@@ -1,16 +1,15 @@
 FROM 1000kit/base-jdk
 
-MAINTAINER Dr. Stefan Tausendpfund <docker@1000kit.org>
+MAINTAINER 1000kit <docker@1000kit.org>
 
-LABEL Vendor="1000kit"
-LABEL License=GPLv3
-LABEL Version=1.0.0
+LABEL Vendor="1000kit" \
+      License=GPLv3 \
+      Version=1.0.0
 
-ENV EAP_BASE=7.0.0
-ENV EAP_PATCH=7.0.3
-
-ENV JBOSS_HOME=/opt/jboss
-ENV JBOSS_BASE=/opt
+ENV EAP_BASE=7.0.0  \
+    EAP_PATCH=7.0.3 \
+    JBOSS_HOME=/opt/jboss \
+    JBOSS_BASE=/opt
 
 ARG EAP_DOWNLOAD_URL
 
