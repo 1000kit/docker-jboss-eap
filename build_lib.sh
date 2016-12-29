@@ -3,34 +3,32 @@
 
 function getStatus(){
 	containerName=$1
-    containerId=$(docker ps -a | grep -v Exit | grep ${containerName} | awk '{print $1}')
+    containerId=$(getContainerId ${containerName})
     echo $containerId
     if [ -z $containerId ]; then
-    	echo return 1
         return 1
     else
-    	echo return 0
         return 0
     fi
 }
 
 function getContainerId() {
 	containerName=$1
-    containerId=$(docker ps -a | grep -v Exit | grep ${containerName} | awk '{print $1}')
-	return ${containerId}
+    containerId=$(docker ps | grep -v Exit | grep ${containerName} | awk '{print $1}')
+	echo "${containerId}"
 }
 
 function startApache() {
 	containerName=$1
 	port=$2
 	DLPath=$3
-	echo "get status"
+	echo "start Apache: get status"
 	getStatus ${containerName}
 	if [ "$?" != "1" ]; then
-		echo "already runs"	
+		echo "start Apache: already runs"	
 		return 1
 	fi	
-	echo "Start apache Server"	
+	echo "start Apache: Start apache Server"	
 	docker run -d -p ${port}:80 -v ${DLPath}:/var/www/html/Downloads/:ro --name ${containerName} 1000kit/apache
 } 
 

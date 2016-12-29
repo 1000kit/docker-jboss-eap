@@ -54,7 +54,7 @@ docker 	build --build-arg EAP_DOWNLOAD_URL="${EAP_DOWNLOAD_URL}" --rm --force-rm
 echo "tag image with version ${VERSION}"
 docker tag ${IMAGE}:${VERSION} ${IMAGE}:latest
 
-if [ ! -z ${HTTP_PID} ]; then
+if [ "${startHTTP}" != "false" ]; then
 	apacheCMD stop apacheEAP
 fi
 
