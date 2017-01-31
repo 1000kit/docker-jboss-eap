@@ -7,7 +7,7 @@ LABEL Vendor="1000kit" \
       Version=1.0.0
 
 ENV EAP_BASE=7.0.0  \
-    EAP_PATCH=7.0.3 \
+    EAP_PATCH=7.0.4 \
     JBOSS_HOME=/opt/jboss \
     JBOSS_BASE=/opt
 

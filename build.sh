@@ -5,7 +5,7 @@
 #
 #
 BVERSION=7.0.0
-VERSION=7.0.3
+VERSION=7.0.4
 
 IMAGE="1000kit/jboss-eap"
 
