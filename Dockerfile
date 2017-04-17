@@ -18,7 +18,7 @@ ADD ./install/applyPatch.sh /tmp/
 
 # Create a user and group used to launch processes
 RUN groupadd -r jboss -g 2000 \
- && useradd -u 2000 -r -g jboss -m -d /home/jboss -s /sbin/nologin -c "jboss user" jboss \
+ && useradd -l -u 2000 -r -g jboss -m -d /home/jboss -s /sbin/nologin -c "jboss user" jboss \
  && chmod -R 755 /home/jboss \
  && mkdir ${JBOSS_BASE} > /dev/null 2&>1;  chmod 755 ${JBOSS_BASE} ; chown -R jboss:jboss ${JBOSS_BASE} \
  && echo 'jboss ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \
