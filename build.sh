@@ -15,7 +15,9 @@ pwd
 . ./build_lib.sh
 
 startHTTP=false
-EAPDownloadDir=$1
+if [ ! -z $1 ]; then
+    EAPDownloadDir=$1
+fi
 if [ -z "${EAPDownloadDir}" ]; then
 	
 	EAPDownloadDir="${HOME}/Downloads/redhat/eap7.0"	
