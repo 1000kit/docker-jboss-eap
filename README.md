@@ -14,11 +14,11 @@ The `Dockerfile` is available in the `7.0.0` branch and is built in the Docker H
 
 ## Build Image
 
-Please download the EAP 7.0.0 zip package from redhat and the EAP 7.0.4 Patch file. Put both in the install directory.
+Please download the EAP 7.0.0 zip package from redhat and the EAP 7.0.4 Patch file. Put both in the `${HOME}/Downloads/redhat/eap7.0` directory.
 
 Take a Dockerfile and build with the default arguments:
 * EAP_DOWNLOAD_URL: download http url where eap and patch of redhat can be downloaded
- 
+
 ~~~~
 $ docker 	build --build-arg EAP_DOWNLOAD_URL="${EAP_DOWNLOAD_URL}" --rm --force-rm -t 1000kit/jboss-eap:7.0.4 .
 ~~~~
