@@ -7,23 +7,21 @@ LABEL Vendor="1000kit" \
       Version=1.0.0
 
 ENV EAP_BASE=7.0.0  \
-    EAP_PATCH=7.0.4 \
+    EAP_PATCH=7.0.5 \
     JBOSS_HOME=/opt/jboss \
     JBOSS_BASE=/opt
 
 ARG EAP_DOWNLOAD_URL
 
 USER root
-ADD ./install/applyPatch.sh /tmp/
 
 # Create a user and group used to launch processes
 RUN groupadd -r jboss -g 2000 \
  && useradd -l -u 2000 -r -g jboss -m -d /home/jboss -s /sbin/nologin -c "jboss user" jboss \
  && chmod -R 755 /home/jboss \
  && mkdir ${JBOSS_BASE} > /dev/null 2&>1;  chmod 755 ${JBOSS_BASE} ; chown -R jboss:jboss ${JBOSS_BASE} \
- && echo 'jboss ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers \
- && chown jboss:jboss /tmp/apply*
-
+ && echo 'jboss ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers 
+ 
 # install User
 USER jboss
 
@@ -35,8 +33,7 @@ RUN    echo "EAP: ${EAP_DOWNLOAD_URL}" \
     && ln -s ${JBOSS_BASE}/jboss-eap-7* ${JBOSS_HOME} \
     && ${JBOSS_HOME}/bin/add-user.sh admin admin2016\! --silent \
     
-    && chmod 755 /tmp/applyPatch.sh \  
-    && /tmp/applyPatch.sh jboss-eap-${EAP_PATCH}-patch.zip\
+    && ${JBOSS_HOME}/bin/jboss-cli.sh  --command="patch apply /tmp/jboss-eap-${EAP_PATCH}-patch.zip" \
     
     && mkdir ${JBOSS_HOME}/standalone/log ; chown jboss:jboss ${JBOSS_HOME}/standalone/log \
     && /bin/rm -rf ${JBOSS_HOME}/.installation /tmp/jboss-eap*.zip
