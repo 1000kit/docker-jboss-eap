@@ -4,8 +4,8 @@
 
 #
 #
-BVERSION=7.0.0
-VERSION=7.0.5
+BVERSION=6.4.1
+VERSION=6.4.1
 
 IMAGE="1000kit/jboss-eap"
 
@@ -20,7 +20,7 @@ if [ ! -z $1 ]; then
 fi
 if [ -z "${EAPDownloadDir}" ]; then
 	
-	EAPDownloadDir="${HOME}/Downloads/redhat/eap7.0"	
+	EAPDownloadDir="${HOME}/Downloads/redhat/eap6.4"
 	echo "Using ${EAPDownloadDir} as Download dir"	
 fi
 
@@ -32,10 +32,6 @@ else
 		echo "!! Download EAP BASE ${BVERSION} in ${EAPDownloadDir} or provide parameter to this script for location"
 		exit
 	fi
-	if [ ! -e ${EAPDownloadDir}/jboss-eap-${VERSION}-patch.zip ]; then
-		echo "!! Download EAP PATCH ${VERSION} in ${EAPDownloadDir} or provide parameter to this script for location"
-		exit
-	fi	
 	
 	LOCIP=`hostname -I | cut -d' ' -f1`
 	

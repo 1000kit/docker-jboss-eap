@@ -6,8 +6,7 @@ LABEL Vendor="1000kit" \
       License=GPLv3 \
       Version=1.0.0
 
-ENV EAP_BASE=7.0.0  \
-    EAP_PATCH=7.0.5 \
+ENV EAP_BASE=6.4.1  \
     JBOSS_HOME=/opt/jboss \
     JBOSS_BASE=/opt
 
@@ -27,13 +26,11 @@ USER jboss
 
 RUN    echo "EAP: ${EAP_DOWNLOAD_URL}" \   
     && curl -L ${EAP_DOWNLOAD_URL}/jboss-eap-${EAP_BASE}.zip > /tmp/jboss-eap-${EAP_BASE}.zip \
-	&& curl -L ${EAP_DOWNLOAD_URL}/jboss-eap-${EAP_PATCH}-patch.zip > /tmp/jboss-eap-${EAP_PATCH}-patch.zip \
 
     && /usr/bin/unzip -q /tmp/jboss-eap-${EAP_BASE}.zip -d ${JBOSS_BASE}/ \
-    && ln -s ${JBOSS_BASE}/jboss-eap-7* ${JBOSS_HOME} \
+    && ln -s ${JBOSS_BASE}/jboss-eap-6* ${JBOSS_HOME} \
+    && chmod 755 ${JBOSS_HOME}/bin/*.sh \
     && ${JBOSS_HOME}/bin/add-user.sh admin admin2016\! --silent \
-    
-    && ${JBOSS_HOME}/bin/jboss-cli.sh  --command="patch apply /tmp/jboss-eap-${EAP_PATCH}-patch.zip" \
     
     && mkdir ${JBOSS_HOME}/standalone/log ; chown jboss:jboss ${JBOSS_HOME}/standalone/log \
     && /bin/rm -rf ${JBOSS_HOME}/.installation /tmp/jboss-eap*.zip
