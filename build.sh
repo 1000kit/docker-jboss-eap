@@ -4,8 +4,8 @@
 
 #
 #
-BVERSION=7.0.0
-VERSION=7.0.9
+BVERSION=7.1.0
+VERSION=7.1.2
 
 IMAGE="1000kit/jboss-eap"
 
@@ -20,7 +20,7 @@ if [ ! -z $1 ]; then
 fi
 if [ -z "${EAPDownloadDir}" ]; then
 	
-	EAPDownloadDir="${HOME}/Downloads/redhat/eap7.0"	
+	EAPDownloadDir="${HOME}/Downloads/redhat/eap7.1"	
 	echo "Using ${EAPDownloadDir} as Download dir"	
 fi
 

@@ -6,8 +6,8 @@ LABEL Vendor="1000kit" \
       License=GPLv3 \
       Version=1.0.0
 
-ENV EAP_BASE=7.0.0  \
-    EAP_PATCH=7.0.9 \
+ENV EAP_BASE=7.1.0  \
+    EAP_PATCH=7.1.2 \
     JBOSS_HOME=/opt/jboss \
     JBOSS_BASE=/opt
 
